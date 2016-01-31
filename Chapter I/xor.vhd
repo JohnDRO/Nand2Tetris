@@ -1,4 +1,4 @@
--- Mux Gate
+-- Xor Gate
 -- 31/01/2016
 
 library ieee;
@@ -6,20 +6,19 @@ use ieee.std_logic_1164.all;
 
 --------------------------------------------------
 
-entity MuxGate is
+entity XorGate is
 port(	
 		A: 	in 	std_logic;
 		B: 	in 	std_logic;
-		Sel: 	in 	std_logic;
-		Q: 	out 	std_logic
+		C: 	out 	std_logic
 );
-end entity MuxGate;  
+end entity XorGate;  
 
 --------------------------------------------------
 
-architecture rtl of MuxGate is
+architecture rtl of XorGate is
 
-	signal sig1, sig2, sig3 : std_logic;
+	signal sig1, sig2, sig3, sig4 : std_logic;
 	
 	component AndGate
 	port(
@@ -48,29 +47,35 @@ begin
 
    InstAnd1 : AndGate
    port map (
-		A => A,
-		B => Sel,
-		C => sig2
-   );
-   
-   InstAnd2 : AndGate
-   port map (
 		A => B,
 		B => sig1,
 		C => sig3
    );
    
-   InstNot1 : NotGate
+   InstAnd2 : AndGate
    port map (
-		A => Sel,
-		B => sig1
+		A => A,
+		B => sig2,
+		C => sig4
    );
+   
+   InstNot1 : NotGate
+	port map (
+		A => A,
+		B => sig1
+	);
+   
+	InstNot2 : NotGate
+	port map (
+		A => B,
+		B => sig2
+	);
    
    InstOr1 : OrGate
    port map (
 		A => sig3,
-		B => sig2,
-		C => Q
+		B => sig4,
+		C => C
    );
 
 end architecture rtl;
